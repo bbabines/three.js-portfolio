@@ -21,6 +21,8 @@ export class App {
 
 		this.clock = new THREE.Clock();
 		this.animate();
+
+		this.addPortalListener();
 	}
 
 	animate() {
@@ -32,5 +34,29 @@ export class App {
 		this.renderer.render(this.currentScene);
 
 		window.requestAnimationFrame(() => this.animate());
+	}
+
+	addPortalListener() {
+		window.addEventListener("dblclick", (event) => {
+			const nextScene = this.currentScene.handlePortalClick(
+				event,
+				this.renderer.camera
+			);
+
+			if (nextScene && this.scenes[nextScene]) {
+				this.switchScenes(nextScene);
+			}
+		});
+	}
+
+	switchScenes(sceneName) {
+		if (this.scenes[sceneName]) {
+			this.currentScene = this.scenes[sceneName];
+		}
+
+		// @TODO - may need to add a camera to the current scene if it doesn't have one
+		// if (!this.currentScene.children.includes(this.renderer.camera)) {
+		// 	this.currentScene.add(this.renderer.camera);
+		// }
 	}
 }

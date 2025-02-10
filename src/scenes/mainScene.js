@@ -10,6 +10,9 @@ export class MainScene extends BaseScene {
 		this.setupLights();
 		this.setupFloor();
 		this.loadPortals();
+
+		this.raycaster = new THREE.Raycaster();
+		this.mouse = new THREE.Vector2();
 	}
 
 	setupLights() {
@@ -44,6 +47,30 @@ export class MainScene extends BaseScene {
 				this.add(model);
 			});
 		});
+	}
+
+	// Call this from app.js
+	handlePortalClick(event, camera) {
+		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+		this.raycaster.setFromCamera(this.mouse, camera);
+
+		const leftIntersects = this.portals.left
+			? this.raycaster.intersectObject(this.portals.left, true)
+			: [];
+
+		const rightIntersects = this.portals.right
+			? this.raycaster.intersectObject(this.portals.right, true)
+			: [];
+
+		if (leftIntersects.length > 0) {
+			return "sceneTwo";
+		} else if (rightIntersects.length > 0) {
+			return "sceneThree";
+		}
+
+		return null;
 	}
 
 	update(elapsedTime) {

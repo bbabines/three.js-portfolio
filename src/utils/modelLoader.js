@@ -19,7 +19,7 @@ export class ModelLoader {
 		return this.loader.load(
 			cleanPath,
 			(gltf) => {
-				console.log("Model loaded:", gltf);
+				// console.log("Model loaded:", gltf);
 				onLoad(gltf.scene);
 			},
 			(xhr) => {
