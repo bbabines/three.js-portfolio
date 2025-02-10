@@ -5,7 +5,7 @@ import { ModelLoader } from "../utils/modelLoader";
 export class MainScene extends BaseScene {
 	constructor() {
 		super();
-		this.portals = [];
+		this.portals = { left: null, right: null };
 		this.modelLoader = new ModelLoader();
 		this.setupLights();
 		this.setupFloor();
@@ -32,15 +32,15 @@ export class MainScene extends BaseScene {
 	}
 
 	loadPortals() {
-		const portalPositions = [
-			new THREE.Vector3(-2, 0, 0),
-			new THREE.Vector3(2, 0, 0),
+		const portalData = [
+			{ position: new THREE.Vector3(-2, 0, 0), key: "left" },
+			{ position: new THREE.Vector3(2, 0, 0), key: "right" },
 		];
 
-		portalPositions.forEach((position) => {
+		portalData.forEach(({ position, key }) => {
 			this.modelLoader.load("models/portal.glb", (model) => {
 				model.position.copy(position);
-				this.portals.push(model);
+				this.portals[key] = model;
 				this.add(model);
 			});
 		});

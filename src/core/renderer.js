@@ -16,10 +16,6 @@ export class Renderer {
 	}
 
 	setupRenderer() {
-		// const renderer = new THREE.WebGLRenderer({
-		// 	canvas: canvas,
-		// });
-
 		this.renderer = new THREE.WebGLRenderer({
 			canvas: this.canvas,
 		});
@@ -28,12 +24,6 @@ export class Renderer {
 	}
 
 	setupCamera() {
-		// const camera = new THREE.PerspectiveCamera(
-		// 75,
-		// sizes.width / sizes.height,
-		// 0.1,
-		// 100
-		// );
 		this.camera = new THREE.PerspectiveCamera(
 			75,
 			this.sizes.width / this.sizes.height,
@@ -41,9 +31,6 @@ export class Renderer {
 			100
 		);
 
-		// camera.position.x = 1;
-		// camera.position.y = 1;
-		// camera.position.z = 2;
 		this.camera.position.set(1, 1, 2);
 	}
 
@@ -53,12 +40,6 @@ export class Renderer {
 	}
 
 	setupEventListeners() {
-		// window.addEventListener("resize", () => {
-		// 	// Update sizes
-		// 	sizes.width = window.innerWidth;
-		// 	sizes.height = window.innerHeight;
-		// 	``;
-
 		window.addEventListener("resize", () => {
 			this.sizes.width = window.innerWidth;
 			this.sizes.height = window.innerHeight;
@@ -69,27 +50,20 @@ export class Renderer {
 	}
 
 	updateRenderSize() {
-		// renderer.setSize(sizes.width, sizes.height);
-		// renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 		this.renderer.setSize(this.sizes.width, this.sizes.height);
 		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 	}
 
 	updateCamera() {
-		// camera.aspect = sizes.width / sizes.height;
-		// ``;
-		// camera.updateProjectionMatrix();
 		this.camera.aspect = this.sizes.width / this.sizes.height;
 		this.camera.updateProjectionMatrix();
 	}
 
 	update() {
-		// 	controls.update();
 		this.controls?.update();
 	}
 
 	render(scene) {
-		// 	renderer.render(sceneOne, camera);
 		this.renderer.render(scene, this.camera);
 	}
 }
