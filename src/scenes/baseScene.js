@@ -8,10 +8,14 @@ export class BaseScene extends THREE.Scene {
 	}
 
 	initilize() {
-		// Common scene setup logic
-		// this.loadingManager = new THREE.LoadingManager();
-		// this.textureLoader = new THREE.TextureLoader(this.loadingManager);
-		// this.modelLoader = new ModelLoader();
+		this.raycaster = new THREE.Raycaster();
+		this.mouse = new THREE.Vector2();
+	}
+
+	handleClick(event, camera) {
+		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+		this.raycaster.setFromCamera(this.mouse, camera);
 	}
 
 	update(elapsedTime) {
