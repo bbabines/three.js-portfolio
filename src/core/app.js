@@ -3,9 +3,16 @@ import { Renderer } from "./renderer";
 import { MainScene } from "../scenes/mainScene";
 import { SceneTwo } from "../scenes/sceneTwo";
 import { SceneThree } from "../scenes/sceneThree";
+import { Debug } from "../utils/debug";
+import Stats from "stats.js";
 
 export class App {
 	constructor(canvas) {
+		this.stats = new Stats();
+		document.body.appendChild(this.stats.dom);
+
+		this.debug = new Debug();
+
 		this.canvas = canvas;
 		this.renderer = new Renderer(canvas);
 
@@ -31,7 +38,13 @@ export class App {
 
 		this.renderer.update();
 		this.currentScene.update(elapsedTime);
+
+		this.stats.begin();
+		this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+
 		this.renderer.render(this.currentScene);
+
+		this.stats.end();
 
 		window.requestAnimationFrame(() => this.animate());
 	}
@@ -50,6 +63,9 @@ export class App {
 	}
 
 	switchScenes(sceneName) {
+		// Check amount of triangles upon switching scenes
+		console.log(`Triangles: ${this.renderer.info.render.triangles}`);
+
 		if (this.scenes[sceneName]) {
 			this.currentScene = this.scenes[sceneName];
 		}

@@ -15,6 +15,10 @@ export class Renderer {
 		this.setupEventListeners();
 	}
 
+	get info() {
+		return this.renderer.info;
+	}
+
 	setupRenderer() {
 		this.renderer = new THREE.WebGLRenderer({
 			canvas: this.canvas,
