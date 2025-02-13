@@ -30,6 +30,8 @@ export class App {
 		this.animate();
 
 		this.addPortalListener();
+
+		console.log(this.renderer.info.render);
 	}
 
 	animate() {
@@ -40,7 +42,7 @@ export class App {
 		this.currentScene.update(elapsedTime);
 
 		this.stats.begin();
-		this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+		this.stats.showPanel(2); // 0: fps, 1: ms, 2: mb, 3+: custom
 
 		this.renderer.render(this.currentScene);
 
@@ -64,7 +66,7 @@ export class App {
 
 	switchScenes(sceneName) {
 		// Check amount of triangles upon switching scenes
-		console.log(`Triangles: ${this.renderer.info.render.triangles}`);
+		console.log(this.renderer.info.render);
 
 		if (this.scenes[sceneName]) {
 			this.currentScene = this.scenes[sceneName];
