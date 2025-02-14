@@ -5,8 +5,6 @@ import { SceneTwo } from "../scenes/sceneTwo";
 import { SceneThree } from "../scenes/sceneThree";
 import { Debug } from "../utils/debug";
 import Stats from "stats.js";
-import { ParticleEmitter } from "../particles/particleEmitter";
-import { ParticleProperties } from "../particles/particleProperties";
 
 export class App {
 	constructor(canvas) {
@@ -77,19 +75,33 @@ export class App {
 		if(this.currentScene === this.scenes['sceneTwo']) {
 			const textureLoader = new THREE.TextureLoader()
 			textureLoader.load(
-				'/textures/particles/2.png',
+				'/textures/particles/8.png',
 				(texture) => {
-					console.log('Texture loaded successfully:', texture)
 
-					const sceneTwoParticleProps = new ParticleProperties({
-						geometry: new THREE.SphereGeometry(3, 32, 32),
-						textureColor: '#ff88cc',
-						textureSize: 0.1,
-						textureMap: texture,
-						transparency: true,
-						alphaMap: texture,
-					})
-					const addSceneTwoParticles = new ParticleEmitter(this.currentScene, {particleProps: sceneTwoParticleProps});
+					const particleCount = 5000
+					const positions = new Float32Array(particleCount * 3)
+
+					for (let i = 0; i < particleCount; i++) {
+						positions[i] = (Math.random() - 0.5) * 10; 
+					}
+
+					const geometry = new THREE.BufferGeometry()
+					geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+
+					const materials = new THREE.PointsMaterial({
+							color: 'blue',
+							size: 0.1,
+							map: texture,
+							alphaMap: texture,
+							transparency: true,
+							alphaTest: 0.001,
+							depthTest: false,
+							depthWrite: false,
+							blending: THREE.AdditiveBlending
+						})
+				
+					const sceneTwoParticles = new THREE.Points(geometry, materials)
+					this.currentScene.add(sceneTwoParticles)
 					
 				},
 				undefined,
@@ -100,14 +112,14 @@ export class App {
 		}
 
 		if(this.currentScene === this.scenes['sceneThree']) {
-			const sceneThreeParticleProps = new ParticleProperties({
-				geometry: new THREE.TorusGeometry(),
-				textureColor: "orange",
-				textureSize: 0.2
-			})
-
-			const addSceneThreeParticles = new ParticleEmitter(this.currentScene, {particleProps: sceneThreeParticleProps})
+			const geometry = new THREE.TorusGeometry()
+			const materials = new THREE.PointsMaterial({
+					color: "#ff88cc",
+					size: 0.2
+				})
+			
+			const sceneThreeParticles = new THREE.Points(geometry, materials )
+			this.currentScene.add(sceneThreeParticles)
 		}
-	
 	}
 }
