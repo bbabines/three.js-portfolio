@@ -5,12 +5,13 @@ import { SceneTwo } from "../scenes/sceneTwo";
 import { SceneThree } from "../scenes/sceneThree";
 import { Debug } from "../utils/debug";
 import Stats from "stats.js";
+import { ParticleEmitter } from "../particles/particleEmitter";
+import { ParticleProperties } from "../particles/particleProperties";
 
 export class App {
 	constructor(canvas) {
 		this.stats = new Stats();
 		document.body.appendChild(this.stats.dom);
-
 		this.debug = new Debug();
 
 		this.canvas = canvas;
@@ -21,16 +22,13 @@ export class App {
 			sceneTwo: new SceneTwo(),
 			sceneThree: new SceneThree(),
 		};
-
 		this.currentScene = this.scenes.main;
-
 		this.currentScene.add(this.renderer.camera);
-
+		
 		this.clock = new THREE.Clock();
 		this.animate();
 
 		this.addPortalListener();
-
 		console.log(this.renderer.info.render);
 	}
 
@@ -42,7 +40,7 @@ export class App {
 		this.currentScene.update(elapsedTime);
 
 		this.stats.begin();
-		this.stats.showPanel(2); // 0: fps, 1: ms, 2: mb, 3+: custom
+		this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 
 		this.renderer.render(this.currentScene);
 
@@ -72,9 +70,33 @@ export class App {
 			this.currentScene = this.scenes[sceneName];
 		}
 
+		this.addParticles()
+
 		// @TODO - may need to add a camera to the current scene if it doesn't have one
 		// if (!this.currentScene.children.includes(this.renderer.camera)) {
 		// 	this.currentScene.add(this.renderer.camera);
 		// }
+	}
+
+	addParticles(){
+		if(this.currentScene === this.scenes['sceneTwo']) {
+			const sceneTwoParticleProps = new ParticleProperties({
+				geometry: new THREE.SphereGeometry(10),
+				textureColor: 'green',
+				textureSize: 0.5
+			})
+			const addSceneTwoParticles = new ParticleEmitter(this.currentScene, {sceneTwoParticleProps});
+		}
+
+		if(this.currentScene === this.scenes['sceneThree']) {
+			const sceneThreeParticleProps = new ParticleProperties({
+				geometry: new THREE.TorusGeometry(),
+				textureColor: "orange",
+				textureSize: 2
+			})
+
+			const addSceneThreeParticles = new ParticleEmitter(this.currentScene, {sceneThreeParticleProps})
+		}
+	
 	}
 }

@@ -9,10 +9,7 @@ export class MainScene extends BaseScene {
 		this.modelLoader = new ModelLoader();
 		this.setupLights();
 		this.loadPortals();
-
 		this.setupFloor();
-		// this.loadFloor();
-
 		this.instanceGrass();
 
 		this.raycaster = new THREE.Raycaster();
@@ -22,17 +19,7 @@ export class MainScene extends BaseScene {
 	setupLights() {
 		const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 		this.add(ambientLight);
-
-		const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-		directionalLight.position.set(5, 5, 5);
-		this.add(directionalLight);
 	}
-
-	// loadFloor() {
-	// 	this.modelLoader.load("/models/floor.glb", (model) => {
-	// 		this.add(model);
-	// 	});
-	// }
 
 	instanceGrass() {
 		this.modelLoader.load("/models/grass.glb", (model) => {
