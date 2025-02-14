@@ -71,31 +71,42 @@ export class App {
 		}
 
 		this.addParticles()
-
-		// @TODO - may need to add a camera to the current scene if it doesn't have one
-		// if (!this.currentScene.children.includes(this.renderer.camera)) {
-		// 	this.currentScene.add(this.renderer.camera);
-		// }
 	}
 
 	addParticles(){
 		if(this.currentScene === this.scenes['sceneTwo']) {
-			const sceneTwoParticleProps = new ParticleProperties({
-				geometry: new THREE.SphereGeometry(10),
-				textureColor: 'green',
-				textureSize: 0.5
-			})
-			const addSceneTwoParticles = new ParticleEmitter(this.currentScene, {sceneTwoParticleProps});
+			const textureLoader = new THREE.TextureLoader()
+			textureLoader.load(
+				'/textures/particles/2.png',
+				(texture) => {
+					console.log('Texture loaded successfully:', texture)
+
+					const sceneTwoParticleProps = new ParticleProperties({
+						geometry: new THREE.SphereGeometry(3, 32, 32),
+						textureColor: '#ff88cc',
+						textureSize: 0.1,
+						textureMap: texture,
+						transparency: true,
+						alphaMap: texture,
+					})
+					const addSceneTwoParticles = new ParticleEmitter(this.currentScene, {particleProps: sceneTwoParticleProps});
+					
+				},
+				undefined,
+				(error) => {
+					console.error('Error loading texture:', error)
+				}
+			)
 		}
 
 		if(this.currentScene === this.scenes['sceneThree']) {
 			const sceneThreeParticleProps = new ParticleProperties({
 				geometry: new THREE.TorusGeometry(),
 				textureColor: "orange",
-				textureSize: 2
+				textureSize: 0.2
 			})
 
-			const addSceneThreeParticles = new ParticleEmitter(this.currentScene, {sceneThreeParticleProps})
+			const addSceneThreeParticles = new ParticleEmitter(this.currentScene, {particleProps: sceneThreeParticleProps})
 		}
 	
 	}
