@@ -9,10 +9,11 @@ export class MainScene extends BaseScene {
 		this.modelLoader = new ModelLoader();
 
 		this.portalEffect = portalEffect;
+		this.addPortalEffectOne();
+		this.addPortalEffectTwo();
 
 		this.setupLights();
 		this.loadPortals();
-		this.loadPortalMask();
 		this.setupFloor();
 		this.instanceGrass();
 
@@ -135,13 +136,22 @@ export class MainScene extends BaseScene {
 	}
 
 	// @PORTAL EFFECT
-	loadPortalMask() {
-		const testMaskGeometry = new THREE.PlaneGeometry(2, 2);
+	addPortalEffectOne() {
+		const testMaskGeometry = new THREE.PlaneGeometry(1, 1);
 
-		// Ensure portalEffect is initialized properly
 		const portalMaterial = this.portalEffect.getMaterial();
 		const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
-		testMask.position.set(0, 2, 0);
+		testMask.position.set(-2, 1, -1);
+		this.add(testMask);
+	}
+
+	// @PORTAL EFFECT
+	addPortalEffectTwo() {
+		const testMaskGeometry = new THREE.PlaneGeometry(1, 1);
+
+		const portalMaterial = this.portalEffect.getMaterial();
+		const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
+		testMask.position.set(2, 1, -1);
 		this.add(testMask);
 	}
 

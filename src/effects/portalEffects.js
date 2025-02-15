@@ -75,9 +75,10 @@ export class PortalEffect {
 		// Store current renderer state
 		const currentRenderTarget = this.renderer.getRenderTarget();
 
-		// Clear the render target before rendering (optional)
+		// Clear the render target before rendering
 		this.renderer.setRenderTarget(this.renderTarget);
-		this.renderer.clear(); // Clear previous contents of the render target
+		// Clear previous contents of the render target
+		this.renderer.clear();
 
 		// Render portal scene to our render target
 		this.renderer.render(portalScene, this.portalCamera);

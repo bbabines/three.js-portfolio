@@ -47,7 +47,7 @@ export class App {
 
 		// Render the portal scene (looking through the portal's camera)
 		if (this.portalEffect) {
-			// Render the portal scene using the portal camera
+			// Choose what scene you want to render
 			this.portalEffect.render(this.scenes.sceneTwo);
 		}
 
