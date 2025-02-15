@@ -41,6 +41,7 @@ export class Renderer {
 	setupControls() {
 		const controls = new OrbitControls(this.camera, this.canvas);
 		controls.enableDamping = true;
+		controls.dampingFactor = 1;
 	}
 
 	setupEventListeners() {

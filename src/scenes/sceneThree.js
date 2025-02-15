@@ -35,6 +35,7 @@ export class SceneThree extends BaseScene {
 		const portalData = [
 			{ position: new THREE.Vector3(-4, 0, 0), key: "left" },
 			{ position: new THREE.Vector3(4, 0, 0), key: "right" },
+			{ position: new THREE.Vector3(0, 0, -2), key: "back" },
 		];
 
 		portalData.forEach(({ position, key }) => {
@@ -62,10 +63,16 @@ export class SceneThree extends BaseScene {
 			? this.raycaster.intersectObject(this.portals.right, true)
 			: [];
 
+		const backIntersects = this.portals.back
+			? this.raycaster.intersectObject(this.portals.back, true)
+			: [];
+
 		if (leftIntersects.length > 0) {
 			return "sceneTwo";
 		} else if (rightIntersects.length > 0) {
 			return "sceneThree";
+		} else if (backIntersects.length > 0) {
+			return "main";
 		}
 
 		return null;
