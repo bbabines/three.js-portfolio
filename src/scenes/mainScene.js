@@ -9,6 +9,7 @@ export class MainScene extends BaseScene {
 		this.modelLoader = new ModelLoader();
 		this.setupLights();
 		this.loadPortals();
+		this.loadPortalMask();
 		this.setupFloor();
 		this.instanceGrass();
 
@@ -127,6 +128,23 @@ export class MainScene extends BaseScene {
 				this.portals[key] = model;
 				this.add(model);
 			});
+		});
+	}
+
+	loadPortalMask() {
+		const textureLoader = new THREE.TextureLoader();
+
+		textureLoader.load("/textures/galaxy.jpg", (texture) => {
+			// Create the portal plane with the effect material
+			const testMaskGeometry = new THREE.PlaneGeometry(2, 2);
+			const portalMaterial = this.portalEffect.getMaterial();
+
+			// Set the texture in the portal material
+			this.portalEffect.setBackgroundTexture(texture);
+
+			const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
+			testMask.position.set(0, 2, 0);
+			this.add(testMask);
 		});
 	}
 

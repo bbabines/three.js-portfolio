@@ -22,6 +22,7 @@ export class Renderer {
 	setupRenderer() {
 		this.renderer = new THREE.WebGLRenderer({
 			canvas: this.canvas,
+			antialias: true,
 		});
 
 		this.updateRenderSize();
