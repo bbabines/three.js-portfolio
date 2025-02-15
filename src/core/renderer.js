@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export class Renderer {
 	constructor(canvas) {
@@ -40,9 +40,9 @@ export class Renderer {
 	}
 
 	setupControls() {
-		const controls = new OrbitControls(this.camera, this.canvas);
-		controls.enableDamping = true;
-		controls.dampingFactor = 1;
+		this.controls = new OrbitControls(this.camera, this.canvas);
+		this.controls.enableDamping = true;
+		this.controls.dampingFactor = 1;
 	}
 
 	setupEventListeners() {

@@ -3,43 +3,86 @@ import * as THREE from "three";
 export class PortalEffect {
 	constructor(renderer, camera) {
 		this.renderer = renderer;
-		this.camera = camera;
+		this.mainCamera = camera;
 
+		// Create a render target
+		this.renderTarget = new THREE.WebGLRenderTarget(
+			window.innerWidth,
+			window.innerHeight,
+			{
+				minFilter: THREE.LinearFilter,
+				magFilter: THREE.LinearFilter,
+				format: THREE.RGBAFormat,
+			}
+		);
+
+		// Create a portal camera that will match main camera position
+		this.portalCamera = this.mainCamera.clone();
+
+		// Create portal material
 		this.portalMaterial = new THREE.ShaderMaterial({
 			uniforms: {
-				tBackground: { value: null },
+				tPortal: { value: this.renderTarget.texture },
 			},
 			vertexShader: `
-                varying vec2 vUv;
-                
-                void main() {
-                    vUv = uv;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-            `,
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
 			fragmentShader: `
-                uniform sampler2D tBackground;
-                varying vec2 vUv;
-                
-                void main() {
-                    vec4 color = texture2D(tBackground, vUv);
-                    gl_FragColor = color;
-                }
-            `,
+            uniform sampler2D tPortal;
+            varying vec2 vUv;
+            void main() {
+                vec4 color = texture2D(tPortal, vUv);
+                gl_FragColor = color;
+            }
+        `,
 			side: THREE.DoubleSide,
-			transparent: true,
 		});
-	}
 
-	setBackgroundTexture(texture) {
-		this.portalMaterial.uniforms.tBackground.value = texture;
-	}
+		// Check if portalMaterial is correctly initialized
+		if (!this.portalMaterial) {
+			console.error("Portal material failed to initialize");
+		}
 
-	update() {
-		// @TODO if we need an animation to the shader
+		// Handle window resize
+		window.addEventListener("resize", () => {
+			this.renderTarget.setSize(window.innerWidth, window.innerHeight);
+		});
 	}
 
 	getMaterial() {
 		return this.portalMaterial;
+	}
+
+	updateCamera() {
+		// Sync the portal camera's position with the main camera's position
+		this.portalCamera.position.copy(this.mainCamera.position);
+
+		// Update the portal camera to always face the same direction relative to the portal view
+		this.portalCamera.rotation.copy(this.mainCamera.rotation);
+	}
+
+	// Render the portal scene
+	render(portalScene) {
+		if (!portalScene) return;
+
+		// Update portal camera
+		this.updateCamera();
+
+		// Store current renderer state
+		const currentRenderTarget = this.renderer.getRenderTarget();
+
+		// Clear the render target before rendering (optional)
+		this.renderer.setRenderTarget(this.renderTarget);
+		this.renderer.clear(); // Clear previous contents of the render target
+
+		// Render portal scene to our render target
+		this.renderer.render(portalScene, this.portalCamera);
+
+		// Restore previous render target
+		this.renderer.setRenderTarget(currentRenderTarget);
 	}
 }

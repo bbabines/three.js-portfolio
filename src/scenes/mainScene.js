@@ -3,10 +3,13 @@ import { BaseScene } from "./baseScene";
 import { ModelLoader } from "../utils/modelLoader";
 
 export class MainScene extends BaseScene {
-	constructor() {
+	constructor(portalEffect) {
 		super();
 		this.portals = { left: null, right: null };
 		this.modelLoader = new ModelLoader();
+
+		this.portalEffect = portalEffect;
+
 		this.setupLights();
 		this.loadPortals();
 		this.loadPortalMask();
@@ -131,21 +134,15 @@ export class MainScene extends BaseScene {
 		});
 	}
 
+	// @PORTAL EFFECT
 	loadPortalMask() {
-		const textureLoader = new THREE.TextureLoader();
+		const testMaskGeometry = new THREE.PlaneGeometry(2, 2);
 
-		textureLoader.load("/textures/galaxy.jpg", (texture) => {
-			// Create the portal plane with the effect material
-			const testMaskGeometry = new THREE.PlaneGeometry(2, 2);
-			const portalMaterial = this.portalEffect.getMaterial();
-
-			// Set the texture in the portal material
-			this.portalEffect.setBackgroundTexture(texture);
-
-			const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
-			testMask.position.set(0, 2, 0);
-			this.add(testMask);
-		});
+		// Ensure portalEffect is initialized properly
+		const portalMaterial = this.portalEffect.getMaterial();
+		const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
+		testMask.position.set(0, 2, 0);
+		this.add(testMask);
 	}
 
 	// Call this from app.js

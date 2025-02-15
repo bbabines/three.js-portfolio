@@ -16,21 +16,21 @@ export class App {
 		this.canvas = canvas;
 		this.renderer = new Renderer(canvas);
 
+		// Initialize the portal effect first
 		this.portalEffect = new PortalEffect(
 			this.renderer.renderer,
 			this.renderer.camera
 		);
 
+		// Now initialize the scenes, passing the portalEffect into MainScene
 		this.scenes = {
-			main: new MainScene(),
+			main: new MainScene(this.portalEffect), // Pass the portalEffect here
 			sceneTwo: new SceneTwo(),
 			sceneThree: new SceneThree(),
 		};
 
 		this.currentScene = this.scenes.main;
 		this.currentScene.add(this.renderer.camera);
-
-		this.scenes.main.portalEffect = this.portalEffect;
 
 		this.clock = new THREE.Clock();
 
@@ -45,8 +45,13 @@ export class App {
 
 		this.stats.begin();
 
-		this.portalEffect.update();
+		// Render the portal scene (looking through the portal's camera)
+		if (this.portalEffect) {
+			// Render the portal scene using the portal camera
+			this.portalEffect.render(this.scenes.sceneTwo);
+		}
 
+		// Render the main scene (which contains the portal plane)
 		this.currentScene.update(elapsedTime);
 		this.renderer.render(this.currentScene);
 
