@@ -16,15 +16,13 @@ export class App {
 		this.canvas = canvas;
 		this.renderer = new Renderer(canvas);
 
-		// Initialize the portal effect first
 		this.portalEffect = new PortalEffect(
 			this.renderer.renderer,
 			this.renderer.camera
 		);
 
-		// Now initialize the scenes, passing the portalEffect into MainScene
 		this.scenes = {
-			main: new MainScene(this.portalEffect), // Pass the portalEffect here
+			main: new MainScene(this.portalEffect),
 			sceneTwo: new SceneTwo(),
 			sceneThree: new SceneThree(),
 		};
@@ -48,7 +46,7 @@ export class App {
 		// Render the portal scene (looking through the portal's camera)
 		if (this.portalEffect) {
 			// Choose what scene you want to render
-			this.portalEffect.render(this.scenes.sceneTwo);
+			this.portalEffect.render(this.scenes.sceneTwo, this.scenes.sceneThree);
 		}
 
 		// Render the main scene (which contains the portal plane)

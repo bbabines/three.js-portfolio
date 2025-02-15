@@ -9,6 +9,7 @@ export class MainScene extends BaseScene {
 		this.modelLoader = new ModelLoader();
 
 		this.portalEffect = portalEffect;
+		this.initPortalMaterials();
 		this.addPortalEffectOne();
 		this.addPortalEffectTwo();
 
@@ -19,6 +20,24 @@ export class MainScene extends BaseScene {
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
+	}
+
+	initPortalMaterials() {
+		if (!this.portalEffect) {
+			console.error("❌ portalEffect is undefined!");
+			return;
+		}
+
+		const materials = this.portalEffect.getMaterials();
+		if (!materials.materialOne || !materials.materialTwo) {
+			console.error("❌ Portal materials are missing!", materials);
+			return;
+		}
+
+		this.portalMaterials = {
+			materialOne: materials.materialOne,
+			materialTwo: materials.materialTwo,
+		};
 	}
 
 	setupLights() {
@@ -139,8 +158,10 @@ export class MainScene extends BaseScene {
 	addPortalEffectOne() {
 		const testMaskGeometry = new THREE.PlaneGeometry(1, 1);
 
-		const portalMaterial = this.portalEffect.getMaterial();
-		const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
+		const testMask = new THREE.Mesh(
+			testMaskGeometry,
+			this.portalMaterials.materialOne
+		);
 		testMask.position.set(-2, 1, -1);
 		this.add(testMask);
 	}
@@ -149,8 +170,10 @@ export class MainScene extends BaseScene {
 	addPortalEffectTwo() {
 		const testMaskGeometry = new THREE.PlaneGeometry(1, 1);
 
-		const portalMaterial = this.portalEffect.getMaterial();
-		const testMask = new THREE.Mesh(testMaskGeometry, portalMaterial);
+		const testMask = new THREE.Mesh(
+			testMaskGeometry,
+			this.portalMaterials.materialTwo
+		);
 		testMask.position.set(2, 1, -1);
 		this.add(testMask);
 	}
