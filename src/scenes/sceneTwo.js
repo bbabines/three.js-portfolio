@@ -21,14 +21,17 @@ export class SceneTwo extends BaseScene {
 	}
 
 	setupFloor() {
-		const geometry = new THREE.PlaneGeometry(15, 15);
-		const material = new THREE.MeshBasicMaterial({
-			color: "red",
-			side: THREE.DoubleSide,
-		});
-		const floor = new THREE.Mesh(geometry, material);
-		floor.rotation.x = Math.PI / 2;
-		this.add(floor);
+		const gridHelper = new THREE.GridHelper(100, 100, "red", "red");
+		this.add(gridHelper);
+
+		// const geometry = new THREE.PlaneGeometry(15, 15);
+		// const material = new THREE.MeshBasicMaterial({
+		// 	color: "red",
+		// 	side: THREE.DoubleSide,
+		// });
+		// const floor = new THREE.Mesh(geometry, material);
+		// floor.rotation.x = Math.PI / 2;
+		// this.add(floor);
 	}
 
 	loadPortals() {

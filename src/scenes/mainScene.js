@@ -129,24 +129,27 @@ export class MainScene extends BaseScene {
 	}
 
 	setupFloor() {
-		const geometry = new THREE.PlaneGeometry(15, 15);
-		const material = new THREE.MeshBasicMaterial({
-			side: THREE.DoubleSide,
-			color: "white",
-		});
-		const floor = new THREE.Mesh(geometry, material);
-		floor.rotation.x = Math.PI / 2;
-		this.add(floor);
+		const gridHelper = new THREE.GridHelper(100, 100, "purple", "purple");
+		this.add(gridHelper);
+
+		// const geometry = new THREE.PlaneGeometry(15, 15);
+		// const material = new THREE.MeshBasicMaterial({
+		// 	side: THREE.DoubleSide,
+		// 	color: "white",
+		// });
+		// const floor = new THREE.Mesh(geometry, material);
+		// floor.rotation.x = Math.PI / 2;
+		// this.add(floor);
 	}
 
 	loadPortals() {
 		const portalData = [
-			{ position: new THREE.Vector3(-2, 0, 0), key: "left" },
-			{ position: new THREE.Vector3(2, 0, 0), key: "right" },
+			{ position: new THREE.Vector3(-4, 3, 0), key: "left" },
+			{ position: new THREE.Vector3(4, 3, 0), key: "right" },
 		];
 
 		portalData.forEach(({ position, key }) => {
-			this.modelLoader.load("models/portal.glb", (model) => {
+			this.modelLoader.load("models/newPortal.glb", (model) => {
 				model.position.copy(position);
 				this.portals[key] = model;
 				this.add(model);
