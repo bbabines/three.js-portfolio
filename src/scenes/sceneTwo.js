@@ -36,7 +36,7 @@ export class SceneTwo extends BaseScene {
 
 	loadPortals() {
 		const portalData = [
-			{ position: new THREE.Vector3(-3, 0, 0), key: "left" },
+			// { position: new THREE.Vector3(-3, 0, 0), key: "left" },
 			{ position: new THREE.Vector3(3, 0, 0), key: "right" },
 			{ position: new THREE.Vector3(0, 0, -2), key: "back" },
 		];
@@ -58,10 +58,6 @@ export class SceneTwo extends BaseScene {
 
 		this.raycaster.setFromCamera(this.mouse, camera);
 
-		const leftIntersects = this.portals.left
-			? this.raycaster.intersectObject(this.portals.left, true)
-			: [];
-
 		const rightIntersects = this.portals.right
 			? this.raycaster.intersectObject(this.portals.right, true)
 			: [];
@@ -70,9 +66,7 @@ export class SceneTwo extends BaseScene {
 			? this.raycaster.intersectObject(this.portals.back, true)
 			: [];
 
-		if (leftIntersects.length > 0) {
-			return "sceneTwo";
-		} else if (rightIntersects.length > 0) {
+		if (rightIntersects.length > 0) {
 			return "sceneThree";
 		} else if (backIntersects.length > 0) {
 			return "main";

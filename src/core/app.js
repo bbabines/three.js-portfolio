@@ -114,6 +114,7 @@ export class App {
 
 					const sceneTwoParticles = new THREE.Points(geometry, materials);
 					this.currentScene.add(sceneTwoParticles);
+					sceneTwoParticles.position.set(0, 7, 0);
 				},
 				undefined,
 				(error) => {
