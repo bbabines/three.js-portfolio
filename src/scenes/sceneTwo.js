@@ -43,8 +43,8 @@ export class SceneTwo extends BaseScene {
 
 	loadPortals() {
 		const portalData = [
-			{ position: new THREE.Vector3(3, 0, -3), key: "right" },
-			{ position: new THREE.Vector3(0, 0, -3), key: "back" },
+			{ position: new THREE.Vector3(-4, 0, -3), key: "back" },
+			{ position: new THREE.Vector3(0, 0, -3), key: "right" },
 		];
 
 		portalData.forEach(({ position, key }) => {

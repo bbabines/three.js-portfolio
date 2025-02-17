@@ -54,7 +54,6 @@ export class RaycastManager {
 			? this.raycaster.intersectObject(this.portals.back, true)
 			: [];
 
-		// @TODO - add logic to get back to mainScene
 		if (leftIntersects.length > 0) {
 			this.onSceneChange?.("sceneTwo");
 		} else if (rightIntersects.length > 0) {
