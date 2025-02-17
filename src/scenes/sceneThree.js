@@ -9,7 +9,7 @@ export class SceneThree extends BaseScene {
 			this.camera = renderer.camera
 			this.objectsToRaycast = []
 	
-			this.portals = { left: null, right: null };
+			this.portals = { right: null, back: null, left: null };
 			this.modelLoader = new ModelLoader();
 	
 			// this.portalEffect = portalEffect;
@@ -43,14 +43,15 @@ export class SceneThree extends BaseScene {
 
 	loadPortals() {
 		const portalData = [
-			{ position: new THREE.Vector3(-4, 0, -3), key: "left" },
-			{ position: new THREE.Vector3(0, 0, -3), key: "back" },
+			{ position: new THREE.Vector3(-4, 0, -3), key: "back" },
+			{ position: new THREE.Vector3(0, 0, -3), key: "left" },
 		];
 
 		portalData.forEach(({ position, key }) => {
 			this.modelLoader.load("models/portal.glb", (model) => {
 				model.position.copy(position);
 				this.portals[key] = model;
+				model.name = `${key} portal`
 				this.add(model);
 			});
 		});

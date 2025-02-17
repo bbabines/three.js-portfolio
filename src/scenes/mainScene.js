@@ -9,7 +9,7 @@ export class MainScene extends BaseScene {
 		this.camera = renderer.camera
 		this.objectsToRaycast = []
 
-		this.portals = { left: null, right: null };
+		this.portals = { right: null, back: null, left: null };
 		this.modelLoader = new ModelLoader();
 
 		this.portalEffect = portalEffect;
@@ -20,7 +20,8 @@ export class MainScene extends BaseScene {
 
 		this.setupLights();
 		this.setupFloor();
-		this.instanceGrass();
+		// @TODO - get grass working again
+		// this.instanceGrass();
 
 		this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast, this.portals, onSceneChange)
 	}
@@ -133,6 +134,7 @@ export class MainScene extends BaseScene {
 				});
 
 				this.portals[key] = model;
+				model.name = `${key} portal`
 				this.add(model);
 			});
 		});

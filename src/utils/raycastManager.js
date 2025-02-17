@@ -50,20 +50,18 @@ export class RaycastManager {
 			? this.raycaster.intersectObject(this.portals.right, true)
 			: [];
 
-		// const backIntersects = this.portals.back
-		// 	? this.raycaster.intersectObject(this.portals.back, true)
-		// 	: [];
+		const backIntersects = this.portals.back
+			? this.raycaster.intersectObject(this.portals.back, true)
+			: [];
 
 		// @TODO - add logic to get back to mainScene
 		if (leftIntersects.length > 0) {
 			this.onSceneChange?.("sceneTwo");
 		} else if (rightIntersects.length > 0) {
 			this.onSceneChange?.("sceneThree");
-		} 
-		
-		// else if (backIntersects.length > 0) {
-		// 	this.onSceneChange?.("mainScene");
-		// }
+		} else if (backIntersects.length > 0) {
+			this.onSceneChange?.("main");
+		}
 
 		return null;
 

@@ -9,7 +9,7 @@ export class SceneTwo extends BaseScene {
 		this.camera = renderer.camera
 		this.objectsToRaycast = []
 
-		this.portals = { left: null, right: null };
+		this.portals = { right: null, back: null, left: null };
 		this.modelLoader = new ModelLoader();
 
 		// this.portalEffect = portalEffect;
@@ -51,6 +51,7 @@ export class SceneTwo extends BaseScene {
 			this.modelLoader.load("models/portal.glb", (model) => {
 				model.position.copy(position);
 				this.portals[key] = model;
+				model.name = `${key} portal`
 				this.add(model);
 			});
 		});
