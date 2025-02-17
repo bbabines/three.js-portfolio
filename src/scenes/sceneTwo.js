@@ -3,12 +3,15 @@ import { BaseScene } from "./baseScene";
 import { ModelLoader } from "../utils/modelLoader";
 
 export class SceneTwo extends BaseScene {
-	constructor() {
+	constructor(portalEffect) {
 		super();
 		this.portals = { left: null, right: null };
 		this.modelLoader = new ModelLoader();
 		this.setupLights();
 		this.setupFloor();
+
+		this.portalEffect = portalEffect;
+		this.initPortalMaterials();
 		this.loadPortals();
 
 		this.raycaster = new THREE.Raycaster();
@@ -34,16 +37,48 @@ export class SceneTwo extends BaseScene {
 		// this.add(floor);
 	}
 
+	initPortalMaterials() {
+		if (!this.portalEffect) {
+			console.error("❌ portalEffect is undefined!");
+			return;
+		}
+
+		const materials = this.portalEffect.getMaterials();
+		if (!materials.materialOne || !materials.materialTwo) {
+			console.error("❌ Portal materials are missing!", materials);
+			return;
+		}
+
+		this.portalMaterials = {
+			materialOne: materials.materialOne,
+			materialTwo: materials.materialTwo,
+		};
+	}
+
 	loadPortals() {
 		const portalData = [
-			// { position: new THREE.Vector3(-3, 0, 0), key: "left" },
-			{ position: new THREE.Vector3(3, 0, 0), key: "right" },
-			{ position: new THREE.Vector3(0, 0, -2), key: "back" },
+			{
+				position: new THREE.Vector3(12, 0, 0),
+				key: "right",
+				material: this.portalMaterials.materialOne,
+			},
+			{
+				position: new THREE.Vector3(-12, 0, -2),
+				key: "back",
+				material: this.portalMaterials.materialTwo,
+			},
 		];
 
-		portalData.forEach(({ position, key }) => {
-			this.modelLoader.load("models/portal.glb", (model) => {
+		portalData.forEach(({ position, key, material }) => {
+			this.modelLoader.load("models/newPortal.glb", (model) => {
 				model.position.copy(position);
+
+				// Find the portal surface mesh in the loaded model
+				model.traverse((child) => {
+					if (child.isMesh) {
+						child.material = material;
+					}
+				});
 				this.portals[key] = model;
 				this.add(model);
 			});

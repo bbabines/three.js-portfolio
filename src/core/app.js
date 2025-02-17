@@ -23,8 +23,8 @@ export class App {
 
 		this.scenes = {
 			main: new MainScene(this.portalEffect),
-			sceneTwo: new SceneTwo(),
-			sceneThree: new SceneThree(),
+			sceneTwo: new SceneTwo(this.portalEffect),
+			sceneThree: new SceneThree(this.portalEffect),
 		};
 
 		this.currentScene = this.scenes.main;
@@ -92,7 +92,7 @@ export class App {
 					const positions = new Float32Array(particleCount * 3);
 
 					for (let i = 0; i < particleCount; i++) {
-						positions[i] = (Math.random() - 0.5) * 10;
+						positions[i] = (Math.random() - 0.5) * 50;
 					}
 
 					const geometry = new THREE.BufferGeometry();
@@ -102,7 +102,7 @@ export class App {
 					);
 
 					const materials = new THREE.PointsMaterial({
-						color: "blue",
+						color: "white",
 						size: 0.1,
 						map: texture,
 						alphaMap: texture,

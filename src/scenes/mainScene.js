@@ -10,16 +10,35 @@ export class MainScene extends BaseScene {
 
 		this.portalEffect = portalEffect;
 		this.initPortalMaterials();
-		this.addPortalEffectOne();
-		this.addPortalEffectTwo();
+		this.loadPortals();
+
+		this.addSquares();
 
 		this.setupLights();
-		this.loadPortals();
 		this.setupFloor();
 		this.instanceGrass();
 
 		this.raycaster = new THREE.Raycaster();
 		this.mouse = new THREE.Vector2();
+	}
+
+	addSquares() {
+		const box1 = new THREE.BoxGeometry();
+		const material1 = new THREE.MeshBasicMaterial({
+			color: "pink",
+		});
+
+		const box2 = new THREE.BoxGeometry();
+		const material2 = new THREE.MeshBasicMaterial({
+			color: "blue",
+		});
+
+		const mesh1 = new THREE.Mesh(box1, material1);
+		const mesh2 = new THREE.Mesh(box2, material2);
+		mesh1.position.set(-3, 0.5, 2);
+		mesh2.position.set(3, 0.5, 2);
+		this.add(mesh1);
+		this.add(mesh2);
 	}
 
 	initPortalMaterials() {
@@ -144,41 +163,33 @@ export class MainScene extends BaseScene {
 
 	loadPortals() {
 		const portalData = [
-			{ position: new THREE.Vector3(-4, 3, 0), key: "left" },
-			{ position: new THREE.Vector3(4, 3, 0), key: "right" },
+			{
+				position: new THREE.Vector3(-4, 0, 0),
+				key: "left",
+				material: this.portalMaterials.materialOne,
+			},
+			{
+				position: new THREE.Vector3(4, 0, 0),
+				key: "right",
+				material: this.portalMaterials.materialTwo,
+			},
 		];
 
-		portalData.forEach(({ position, key }) => {
+		portalData.forEach(({ position, key, material }) => {
 			this.modelLoader.load("models/newPortal.glb", (model) => {
 				model.position.copy(position);
+
+				// Find the portal frame/surface mesh in the loaded model
+				model.traverse((child) => {
+					if (child.isMesh) {
+						child.material = material;
+					}
+				});
+
 				this.portals[key] = model;
 				this.add(model);
 			});
 		});
-	}
-
-	// @PORTAL EFFECT
-	addPortalEffectOne() {
-		const testMaskGeometry = new THREE.PlaneGeometry(1, 1);
-
-		const testMask = new THREE.Mesh(
-			testMaskGeometry,
-			this.portalMaterials.materialOne
-		);
-		testMask.position.set(-2, 1, -1);
-		this.add(testMask);
-	}
-
-	// @PORTAL EFFECT
-	addPortalEffectTwo() {
-		const testMaskGeometry = new THREE.PlaneGeometry(1, 1);
-
-		const testMask = new THREE.Mesh(
-			testMaskGeometry,
-			this.portalMaterials.materialTwo
-		);
-		testMask.position.set(2, 1, -1);
-		this.add(testMask);
 	}
 
 	// Call this from app.js

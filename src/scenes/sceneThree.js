@@ -9,6 +9,9 @@ export class SceneThree extends BaseScene {
 		this.modelLoader = new ModelLoader();
 		this.setupLights();
 		this.setupFloor();
+
+		// this.portalEffect = portalEffect;
+		// this.initPortalMaterials();
 		this.loadPortals();
 
 		this.raycaster = new THREE.Raycaster();
