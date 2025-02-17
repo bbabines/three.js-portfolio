@@ -35,20 +35,29 @@ export class PortalEffect {
 				tPortal: { value: this.renderTargetOne.texture },
 			},
 			vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
 			fragmentShader: `
-            uniform sampler2D tPortal;
-            varying vec2 vUv;
-            void main() {
-                vec4 color = texture2D(tPortal, vUv);
-                gl_FragColor = color;
-            }
-        `,
+        uniform sampler2D tPortal;
+        varying vec2 vUv;
+        void main() {
+            vec4 color = texture2D(tPortal, vUv);
+
+            // Center the UV coordinates
+            vec2 centeredUV = vUv - 0.5;
+            float dist = length(centeredUV);
+
+            // Discard pixels outside the circle
+            if (dist > 0.5) discard;
+
+            gl_FragColor = color;
+        }
+    `,
+			transparent: true, // Ensure transparency works
 			side: THREE.DoubleSide,
 		});
 
@@ -57,20 +66,29 @@ export class PortalEffect {
 				tPortal: { value: this.renderTargetTwo.texture },
 			},
 			vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
 			fragmentShader: `
-            uniform sampler2D tPortal;
-            varying vec2 vUv;
-            void main() {
-                vec4 color = texture2D(tPortal, vUv);
-                gl_FragColor = color;
-            }
-        `,
+        uniform sampler2D tPortal;
+        varying vec2 vUv;
+        void main() {
+            vec4 color = texture2D(tPortal, vUv);
+
+            // Center the UV coordinates
+            vec2 centeredUV = vUv - 0.5;
+            float dist = length(centeredUV);
+
+            // Discard pixels outside the circle
+            if (dist > 0.5) discard;
+
+            gl_FragColor = color;
+        }
+    `,
+			transparent: true, // Ensure transparency works
 			side: THREE.DoubleSide,
 		});
 
