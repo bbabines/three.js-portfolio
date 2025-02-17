@@ -68,82 +68,50 @@ export class MainScene extends BaseScene {
 		this.modelLoader.load("/models/grass.glb", (model) => {
 			const grass = model.children[0];
 
-			if (!grass || !grass.geometry || !grass.material) {
-				console.error("Grass model does not contain geometry");
-				return;
-			}
-
 			// Clone and potentially optimize the geometry
 			const geometry = grass.geometry.clone();
-			geometry.computeBoundingBox();
-			geometry.computeBoundingSphere();
 
-			// Clone and modify material for better performance
+			// Clone
 			const material = grass.material.clone();
 			material.side = THREE.DoubleSide;
-			material.transparent = false; // Disable if not needed
-			material.flatShading = true; // Enable for better performance
 
-			// Increase instance count
-			const instanceCount = 100000; // Can handle much larger numbers now
+			// modify material for better performance
+			material.transparent = false;
+			material.flatShading = true;
+
+			const instanceCount = 1000;
 			const instancedGrass = new THREE.InstancedMesh(
 				geometry,
 				material,
 				instanceCount
 			);
 
+			this.add(instancedGrass);
+
 			// Pre-calculate random values for better performance
-			const copiedGrass = new THREE.Object3D();
-			const matrix = new THREE.Matrix4();
 
 			// Define spread area
-			const spreadX = 10; // Increase area to spread instances
-			const spreadZ = 10;
 
 			// Batch process instances for better performance
-			const batchSize = 1000;
-			let currentInstance = 0;
 
-			const processInstances = () => {
-				const endIdx = Math.min(currentInstance + batchSize, instanceCount);
+			// process instance
 
-				for (let i = currentInstance; i < endIdx; i++) {
-					copiedGrass.position.set(
-						Math.random() * spreadX - spreadX / 2,
-						0,
-						Math.random() * spreadZ - spreadZ / 2
-					);
+			// Vary scale within reasonable bounds
 
-					copiedGrass.rotation.y = Math.random() * Math.PI;
+			// Reduced variation
 
-					// Vary scale within reasonable bounds
-					const scale = 2.8 + Math.random() * 5; // Reduced variation
-					copiedGrass.scale.set(scale, scale, scale);
+			// set neeedsUpdate on instance
 
-					copiedGrass.updateMatrix();
-					instancedGrass.setMatrixAt(i, copiedGrass.matrix);
-				}
-
-				instancedGrass.instanceMatrix.needsUpdate = true;
-				currentInstance = endIdx;
-
-				if (currentInstance < instanceCount) {
-					// Process next batch in next frame
-					requestAnimationFrame(processInstances);
-				}
-			};
+			// Process next batch in next frame
 
 			// Start processing instances
-			processInstances();
 
 			// Add frustum culling
-			instancedGrass.frustumCulled = true;
 
 			// Optional: Add LOD (Level of Detail)
-			const lod = new THREE.LOD();
-			lod.addLevel(instancedGrass, 0); // Full detail
+			// Full detail
 
-			this.add(lod);
+			// add load
 		});
 	}
 
