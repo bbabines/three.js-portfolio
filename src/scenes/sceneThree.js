@@ -1,22 +1,26 @@
 import * as THREE from "three";
 import { BaseScene } from "./baseScene";
 import { ModelLoader } from "../utils/modelLoader";
+import { RaycastManager } from "../utils/raycastManager";
 
 export class SceneThree extends BaseScene {
-	constructor() {
-		super();
-		this.portals = { left: null, right: null };
-		this.modelLoader = new ModelLoader();
-		this.setupLights();
-		this.setupFloor();
-
-		// this.portalEffect = portalEffect;
-		// this.initPortalMaterials();
-		this.loadPortals();
-
-		this.raycaster = new THREE.Raycaster();
-		this.mouse = new THREE.Vector2();
-	}
+	constructor(portalEffect, renderer, onSceneChange) {
+			super();
+			this.camera = renderer.camera
+			this.objectsToRaycast = []
+	
+			this.portals = { left: null, right: null };
+			this.modelLoader = new ModelLoader();
+	
+			// this.portalEffect = portalEffect;
+			// this.initPortalMaterials();
+			this.loadPortals();
+	
+			this.setupLights();
+			this.setupFloor();
+	
+			this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast, this.portals, onSceneChange)
+		}
 
 	setupLights() {
 		const ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -50,31 +54,6 @@ export class SceneThree extends BaseScene {
 				this.add(model);
 			});
 		});
-	}
-
-	// Call this from app.js
-	// @TODO - use base scene logic somehow
-	handlePortalClick(event, camera) {
-		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-		this.raycaster.setFromCamera(this.mouse, camera);
-
-		const leftIntersects = this.portals.left
-			? this.raycaster.intersectObject(this.portals.left, true)
-			: [];
-
-		const backIntersects = this.portals.back
-			? this.raycaster.intersectObject(this.portals.back, true)
-			: [];
-
-		if (leftIntersects.length > 0) {
-			return "sceneTwo";
-		} else if (backIntersects.length > 0) {
-			return "main";
-		}
-
-		return null;
 	}
 
 	update(elapsedTime) {

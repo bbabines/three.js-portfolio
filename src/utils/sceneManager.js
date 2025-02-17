@@ -7,8 +7,8 @@ export class SceneManager{
     constructor(renderer, portalEffect) {
 		this.scenes = {
 			main: new MainScene(portalEffect, renderer, this.switchScenes.bind(this)),
-			sceneTwo: new SceneTwo(portalEffect),
-			sceneThree: new SceneThree(portalEffect),
+			sceneTwo: new SceneTwo(portalEffect, renderer, this.switchScenes.bind(this)),
+			sceneThree: new SceneThree(portalEffect, renderer, this.switchScenes.bind(this)),
 		};
 
 		this.currentScene = this.scenes.main

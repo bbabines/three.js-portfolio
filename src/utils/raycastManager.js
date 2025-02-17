@@ -39,6 +39,9 @@ export class RaycastManager {
 		this.updateMousePosition(event)
 		this.raycaster.setFromCamera(this.mouse, this.camera)
 
+		console.log(this.portals.back);
+		
+
 		const leftIntersects = this.portals.left
 			? this.raycaster.intersectObject(this.portals.left, true)
 			: [];
@@ -47,11 +50,20 @@ export class RaycastManager {
 			? this.raycaster.intersectObject(this.portals.right, true)
 			: [];
 
+		// const backIntersects = this.portals.back
+		// 	? this.raycaster.intersectObject(this.portals.back, true)
+		// 	: [];
+
+		// @TODO - add logic to get back to mainScene
 		if (leftIntersects.length > 0) {
 			this.onSceneChange?.("sceneTwo");
 		} else if (rightIntersects.length > 0) {
 			this.onSceneChange?.("sceneThree");
-		}
+		} 
+		
+		// else if (backIntersects.length > 0) {
+		// 	this.onSceneChange?.("mainScene");
+		// }
 
 		return null;
 
