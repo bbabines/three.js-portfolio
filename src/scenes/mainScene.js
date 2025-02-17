@@ -1,10 +1,14 @@
 import * as THREE from "three";
 import { BaseScene } from "./baseScene";
 import { ModelLoader } from "../utils/modelLoader";
+import { RaycastManager } from "../utils/raycastManager";
 
 export class MainScene extends BaseScene {
-	constructor(portalEffect) {
+	constructor(portalEffect, renderer) {
 		super();
+		this.camera = renderer.camera
+		this.objectsToRaycast = []
+
 		this.portals = { left: null, right: null };
 		this.modelLoader = new ModelLoader();
 
@@ -18,8 +22,8 @@ export class MainScene extends BaseScene {
 		this.setupFloor();
 		this.instanceGrass();
 
-		this.raycaster = new THREE.Raycaster();
-		this.mouse = new THREE.Vector2();
+		this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast)
+
 	}
 
 	addSquares() {
@@ -39,6 +43,9 @@ export class MainScene extends BaseScene {
 		mesh2.position.set(3, 0.5, 2);
 		this.add(mesh1);
 		this.add(mesh2);
+
+		this.objectsToRaycast.push(mesh1)
+		this.objectsToRaycast.push(mesh2)
 	}
 
 	initPortalMaterials() {
@@ -135,8 +142,6 @@ export class MainScene extends BaseScene {
 		});
 	}
 
-	// Call this from app.js
-	// @TODO - use base scene logic somehow
 	handlePortalClick(event, camera) {
 		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
 		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;

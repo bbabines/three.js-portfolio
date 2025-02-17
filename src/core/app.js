@@ -22,7 +22,7 @@ export class App {
 		);
 
 		this.scenes = {
-			main: new MainScene(this.portalEffect),
+			main: new MainScene(this.portalEffect, this.renderer),
 			sceneTwo: new SceneTwo(this.portalEffect),
 			sceneThree: new SceneThree(this.portalEffect),
 		};
@@ -32,7 +32,7 @@ export class App {
 
 		this.clock = new THREE.Clock();
 
-		this.addPortalListener();
+		// this.addPortalListener();
 
 		this.animate();
 		console.log(this.renderer.info.render);

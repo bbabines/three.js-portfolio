@@ -1,13 +1,42 @@
 import * as THREE from "three";
 
-class RaycastManager {
-	constructor(scene, camera, tooltipElement, portals = {}) {}
+export class RaycastManager {
+	constructor(camera, sceneObjects) {
+		this.camera = camera
+		this.mouse = new THREE.Vector2()
+		this.raycaster = new THREE.Raycaster()
+
+		this.sceneObjects = sceneObjects
+
+		window.addEventListener("mousemove", (event) => this.updateMousePosition(event));
+		window.addEventListener("click", (event) => this.handleClick(event));
+	}
+
+	updateMousePosition(event) {
+		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+		this.checkMouseIntersection()
+	}
+
+	checkMouseIntersection() {
+		this.raycaster.setFromCamera(this.mouse, this.camera)
+
+		const intersects = this.raycaster.intersectObjects(
+			Array.isArray(this.sceneObjects) ? this.sceneObjects : [this.sceneObjects],
+			true
+		);
+
+		if (intersects.length > 0) {
+			console.log("Hovered over:", intersects?.[0]?.point);
+		}
+	}
 
 	handleClick(event) {}
 
-	handleHover(event) {}
-
-	handlePortalClick() {}
+	handleHover(event) {
+		console.log('here', true)
+	}
 
 	showTooltip(event, object) {}
 
@@ -17,5 +46,5 @@ class RaycastManager {
 
 	removeOutline() {}
 
-	updateMousePosition(event) {}
+	
 }
