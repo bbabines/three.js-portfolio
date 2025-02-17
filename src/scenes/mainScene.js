@@ -4,7 +4,7 @@ import { ModelLoader } from "../utils/modelLoader";
 import { RaycastManager } from "../utils/raycastManager";
 
 export class MainScene extends BaseScene {
-	constructor(portalEffect, renderer) {
+	constructor(portalEffect, renderer, onSceneChange) {
 		super();
 		this.camera = renderer.camera
 		this.objectsToRaycast = []
@@ -22,7 +22,7 @@ export class MainScene extends BaseScene {
 		this.setupFloor();
 		this.instanceGrass();
 
-		this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast, this.portals)
+		this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast, this.portals, onSceneChange)
 	}
 
 	addSquares() {
@@ -46,13 +46,13 @@ export class MainScene extends BaseScene {
 
 	initPortalMaterials() {
 		if (!this.portalEffect) {
-			console.error("❌ portalEffect is undefined!");
+			console.error("portalEffect is undefined!");
 			return;
 		}
 
 		const materials = this.portalEffect.getMaterials();
 		if (!materials.materialOne || !materials.materialTwo) {
-			console.error("❌ Portal materials are missing!", materials);
+			console.error("Portal materials are missing!", materials);
 			return;
 		}
 

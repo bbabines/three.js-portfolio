@@ -6,7 +6,7 @@ import { SceneThree } from "../scenes/sceneThree";
 export class SceneManager{
     constructor(renderer, portalEffect) {
 		this.scenes = {
-			main: new MainScene(portalEffect, renderer),
+			main: new MainScene(portalEffect, renderer, this.switchScenes.bind(this)),
 			sceneTwo: new SceneTwo(portalEffect),
 			sceneThree: new SceneThree(portalEffect),
 		};
@@ -27,7 +27,7 @@ export class SceneManager{
 			this.currentScene = this.scenes[sceneName];
 		}
 
-		// this.addParticles();
+		this.addParticles();
 	}
 
 	addParticles() {

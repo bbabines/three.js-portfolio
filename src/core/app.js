@@ -33,12 +33,11 @@ export class App {
 
 		// Render the portal scene (looking through the portal's camera)
 		if (this.portalEffect) {
-			// Choose what scene you want to render
 			this.portalEffect.render(this.sceneManager.scenes.sceneTwo, this.sceneManager.scenes.sceneThree);
 		}
 		
 		this.sceneManager.update(elapsedTime)
-		this.renderer.render(this.sceneManager.getCurrentScene);
+		this.renderer.render(this.sceneManager.getCurrentScene());
 
 		this.stats.end();
 
