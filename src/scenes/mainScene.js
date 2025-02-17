@@ -22,8 +22,7 @@ export class MainScene extends BaseScene {
 		this.setupFloor();
 		this.instanceGrass();
 
-		this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast)
-
+		this.raycastManager = new RaycastManager(this.camera, this.objectsToRaycast, this.portals)
 	}
 
 	addSquares() {
@@ -43,9 +42,6 @@ export class MainScene extends BaseScene {
 		mesh2.position.set(3, 0.5, 2);
 		this.add(mesh1);
 		this.add(mesh2);
-
-		this.objectsToRaycast.push(mesh1)
-		this.objectsToRaycast.push(mesh2)
 	}
 
 	initPortalMaterials() {
@@ -140,29 +136,6 @@ export class MainScene extends BaseScene {
 				this.add(model);
 			});
 		});
-	}
-
-	handlePortalClick(event, camera) {
-		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-		this.raycaster.setFromCamera(this.mouse, camera);
-
-		const leftIntersects = this.portals.left
-			? this.raycaster.intersectObject(this.portals.left, true)
-			: [];
-
-		const rightIntersects = this.portals.right
-			? this.raycaster.intersectObject(this.portals.right, true)
-			: [];
-
-		if (leftIntersects.length > 0) {
-			return "sceneTwo";
-		} else if (rightIntersects.length > 0) {
-			return "sceneThree";
-		}
-
-		return null;
 	}
 
 	update(elapsedTime) {

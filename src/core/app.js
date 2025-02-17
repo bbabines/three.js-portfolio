@@ -32,7 +32,7 @@ export class App {
 
 		this.clock = new THREE.Clock();
 
-		// this.addPortalListener();
+		this.addPortalListener();
 
 		this.animate();
 		console.log(this.renderer.info.render);
@@ -58,29 +58,26 @@ export class App {
 		window.requestAnimationFrame(() => this.animate());
 	}
 
-	addPortalListener() {
-		window.addEventListener("dblclick", (event) => {
-			const nextScene = this.currentScene.handlePortalClick(
-				event,
-				this.renderer.camera
-			);
+	// addPortalListener() {
+	// 	window.addEventListener("dblclick", (event) => {
+	// 		const nextScene = this.currentScene.raycastManager.handlePortalClick(event);
 
-			if (nextScene && this.scenes[nextScene]) {
-				this.switchScenes(nextScene);
-			}
-		});
-	}
+	// 		if (nextScene && this.scenes[nextScene]) {
+	// 			this.switchScenes(nextScene);
+	// 		}
+	// 	});
+	// }
 
-	switchScenes(sceneName) {
-		// Check amount of triangles upon switching scenes
-		console.log(this.renderer.info.render);
+	// switchScenes(sceneName) {
+	// 	// Check amount of triangles upon switching scenes
+	// 	console.log(this.renderer.info.render);
 
-		if (this.scenes[sceneName]) {
-			this.currentScene = this.scenes[sceneName];
-		}
+	// 	if (this.scenes[sceneName]) {
+	// 		this.currentScene = this.scenes[sceneName];
+	// 	}
 
-		this.addParticles();
-	}
+	// 	this.addParticles();
+	// }
 
 	addParticles() {
 		if (this.currentScene === this.scenes["sceneTwo"]) {

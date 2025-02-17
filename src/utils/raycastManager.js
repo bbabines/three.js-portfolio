@@ -1,12 +1,14 @@
 import * as THREE from "three";
 
 export class RaycastManager {
-	constructor(camera, sceneObjects) {
+	constructor(camera, sceneObjects, portalData) {
 		this.camera = camera
 		this.mouse = new THREE.Vector2()
 		this.raycaster = new THREE.Raycaster()
 
+		
 		this.sceneObjects = sceneObjects
+		this.portals = portalData
 
 		window.addEventListener("mousemove", (event) => this.updateMousePosition(event));
 		window.addEventListener("click", (event) => this.handleClick(event));
@@ -32,19 +34,38 @@ export class RaycastManager {
 		}
 	}
 
-	handleClick(event) {}
+	handlePortalClick(event) {
+		this.updateMousePosition(event)
+		this.raycaster.setFromCamera(this.mouse, this.camera)
 
-	handleHover(event) {
-		console.log('here', true)
+
+		const leftIntersects = this.portals.left
+			? this.raycaster.intersectObject(this.portals.left, true)
+			: [];
+
+		const rightIntersects = this.portals.right
+			? this.raycaster.intersectObject(this.portals.right, true)
+			: [];
+
+		if (leftIntersects.length > 0) {
+			return "sceneTwo";
+		} else if (rightIntersects.length > 0) {
+			return "sceneThree";
+		}
+
+		return null;
+
 	}
 
-	showTooltip(event, object) {}
+	// handleClick(event) {}
 
-	hideTooltip() {}
+	// showTooltip(event, object) {}
 
-	applyOutline(object) {}
+	// hideTooltip() {}
 
-	removeOutline() {}
+	// applyOutline(object) {}
+
+	// removeOutline() {}
 
 	
 }
