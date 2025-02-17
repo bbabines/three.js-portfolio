@@ -87,31 +87,6 @@ export class MainScene extends BaseScene {
 			);
 
 			this.add(instancedGrass);
-
-			// Pre-calculate random values for better performance
-
-			// Define spread area
-
-			// Batch process instances for better performance
-
-			// process instance
-
-			// Vary scale within reasonable bounds
-
-			// Reduced variation
-
-			// set neeedsUpdate on instance
-
-			// Process next batch in next frame
-
-			// Start processing instances
-
-			// Add frustum culling
-
-			// Optional: Add LOD (Level of Detail)
-			// Full detail
-
-			// add load
 		});
 	}
 
