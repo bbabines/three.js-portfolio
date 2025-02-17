@@ -1,11 +1,9 @@
 import * as THREE from "three";
 import { Renderer } from "./renderer";
-import { MainScene } from "../scenes/mainScene";
-import { SceneTwo } from "../scenes/sceneTwo";
-import { SceneThree } from "../scenes/sceneThree";
 import { Debug } from "../utils/debug";
 import Stats from "stats.js";
 import { PortalEffect } from "../effects/portalEffects";
+import { SceneManager } from "../utils/sceneManager";
 
 export class App {
 	constructor(canvas) {
@@ -21,19 +19,9 @@ export class App {
 			this.renderer.camera
 		);
 
-		this.scenes = {
-			main: new MainScene(this.portalEffect, this.renderer),
-			sceneTwo: new SceneTwo(this.portalEffect),
-			sceneThree: new SceneThree(this.portalEffect),
-		};
-
-		this.currentScene = this.scenes.main;
-		this.currentScene.add(this.renderer.camera);
+		this.sceneManager = new SceneManager(this.renderer, this.portalEffect)
 
 		this.clock = new THREE.Clock();
-
-		this.addPortalListener();
-
 		this.animate();
 		console.log(this.renderer.info.render);
 	}
@@ -46,89 +34,14 @@ export class App {
 		// Render the portal scene (looking through the portal's camera)
 		if (this.portalEffect) {
 			// Choose what scene you want to render
-			this.portalEffect.render(this.scenes.sceneTwo, this.scenes.sceneThree);
+			this.portalEffect.render(this.sceneManager.scenes.sceneTwo, this.sceneManager.scenes.sceneThree);
 		}
-
-		// Render the main scene (which contains the portal plane)
-		this.currentScene.update(elapsedTime);
-		this.renderer.render(this.currentScene);
+		
+		this.sceneManager.update(elapsedTime)
+		this.renderer.render(this.sceneManager.getCurrentScene);
 
 		this.stats.end();
 
 		window.requestAnimationFrame(() => this.animate());
-	}
-
-	// addPortalListener() {
-	// 	window.addEventListener("dblclick", (event) => {
-	// 		const nextScene = this.currentScene.raycastManager.handlePortalClick(event);
-
-	// 		if (nextScene && this.scenes[nextScene]) {
-	// 			this.switchScenes(nextScene);
-	// 		}
-	// 	});
-	// }
-
-	// switchScenes(sceneName) {
-	// 	// Check amount of triangles upon switching scenes
-	// 	console.log(this.renderer.info.render);
-
-	// 	if (this.scenes[sceneName]) {
-	// 		this.currentScene = this.scenes[sceneName];
-	// 	}
-
-	// 	this.addParticles();
-	// }
-
-	addParticles() {
-		if (this.currentScene === this.scenes["sceneTwo"]) {
-			const textureLoader = new THREE.TextureLoader();
-			textureLoader.load(
-				"/textures/particles/8.png",
-				(texture) => {
-					const particleCount = 5000;
-					const positions = new Float32Array(particleCount * 3);
-
-					for (let i = 0; i < particleCount; i++) {
-						positions[i] = (Math.random() - 0.5) * 50;
-					}
-
-					const geometry = new THREE.BufferGeometry();
-					geometry.setAttribute(
-						"position",
-						new THREE.BufferAttribute(positions, 3)
-					);
-
-					const materials = new THREE.PointsMaterial({
-						color: "white",
-						size: 0.1,
-						map: texture,
-						alphaMap: texture,
-						alphaTest: 0.001,
-						depthTest: false,
-						depthWrite: false,
-						blending: THREE.AdditiveBlending,
-					});
-
-					const sceneTwoParticles = new THREE.Points(geometry, materials);
-					this.currentScene.add(sceneTwoParticles);
-					sceneTwoParticles.position.set(0, 7, 0);
-				},
-				undefined,
-				(error) => {
-					console.error("Error loading texture:", error);
-				}
-			);
-		}
-
-		if (this.currentScene === this.scenes["sceneThree"]) {
-			const geometry = new THREE.TorusGeometry();
-			const materials = new THREE.PointsMaterial({
-				color: "#ff88cc",
-				size: 0.2,
-			});
-
-			const sceneThreeParticles = new THREE.Points(geometry, materials);
-			this.currentScene.add(sceneThreeParticles);
-		}
 	}
 }
